@@ -1,0 +1,33 @@
+<div class="button-container">
+    <div class="language">
+        <label>Select Language</label>
+        <select [formControl]="languageCtrl" (ngModelChange)="languageControlChange()">
+            <option *ngFor="let language of languages$ |async" [value]="language.value">{{language.label}}</option>
+        </select>
+    </div>
+    <div class="sort-order">
+        <label>Select Sort Order</label>
+        <select [formControl]="sortCtrl" (ngModelChange)="sortControlChange()">
+            <option *ngFor="let sortOrder of sortOrders" [value]="sortOrder.value">{{sortOrder.label}}</option>
+        </select>
+    </div>
+    <div class="view-type">
+        <label>Select View</label>
+        <select [formControl]="viewTypeCtrl">
+            <option *ngFor="let viewType of viewTypes" [value]="viewType">{{viewType}}</option>
+        </select>
+    </div>
+</div>
+<ng-container [ngSwitch]="viewTypeCtrl.value">
+    <ng-container *ngIf="repository$ |async as repositories; else loading">
+        <ng-container *ngSwitchCase="viewTypesEnum.Card_View">
+            <app-card-view [repository]="repositories"></app-card-view>
+        </ng-container>
+        <ng-container *ngSwitchCase="viewTypesEnum.Card_View">
+            <app-grid-view [repository]="repositories"></app-grid-view>
+        </ng-container>
+    </ng-container>
+</ng-container>
+<ng-template #loading>
+    <h3>Loading...</h3>
+</ng-template>

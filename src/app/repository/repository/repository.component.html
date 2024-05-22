@@ -1,0 +1,16 @@
+<mat-card>
+    <mat-card-title>Repository details</mat-card-title>
+    <mat-card-content>
+        <table>
+            <tbody>
+                <tr><td>Name :</td><td>{{repository.name}}</td></tr>
+                <tr><td>Description :</td><td>{{repository.description}}</td></tr>
+                <tr><td> Owner :</td><td>{{repository.owner['login']}}</td></tr>
+                <tr><td>Stars clount :</td><td>{{repository.stargazers_count}}</td></tr>
+                <tr><td>Languages :</td><td>{{repository.language}}</td></tr>
+                <tr><td>Last Updated Date :</td><td>{{repository.updated_at}}</td></tr>
+                <tr><td>Last Updated Date :</td><td><a [href]="repository.url_html">Link</a></td></tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>
