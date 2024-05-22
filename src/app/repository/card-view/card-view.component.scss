@@ -1,0 +1,12 @@
+.card-view {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item {
+    flex: 0 0 25%;
+    box-sizing: border-box;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
