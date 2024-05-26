@@ -1,1 +1,24 @@
-<p>grid-view works!</p>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Language</th>
+            <th>Owner</th>
+            <th>Star Count</th>
+            <th>Description</th>
+            <th>Last Update Date</th>
+            <th>Repository Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let repository of repository; trackBy: trackByFn">
+            <th>{{repository.name}}</th>
+            <th>{{repository.language}}</th>
+            <th>{{repository.owner['login']}}</th>
+            <th>{{repository.stargazers_count}}</th>
+            <th>{{repository.description}}</th>
+            <th>{{repository.updated_at}}</th>
+            <th><a [href]="repository.url_html">Link</a></th>
+        </tr>
+    </tbody>
+</table>

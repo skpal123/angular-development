@@ -19,14 +19,17 @@
     </div>
 </div>
 <ng-container [ngSwitch]="viewTypeCtrl.value">
-    <ng-container *ngIf="repository$ |async as repositories; else loading">
-        <ng-container *ngSwitchCase="viewTypesEnum.Card_View">
-            <app-card-view [repository]="repositories"></app-card-view>
+    <div class="repository-container" (scroll)="onWindowScroll($event)">
+        <ng-container *ngIf="repositories.length > 0; else loading">
+            <ng-container *ngSwitchCase="viewTypesEnum.Card_View">
+                <app-card-view [repository]="repositories"></app-card-view>
+            </ng-container>
+            <ng-container *ngSwitchCase="viewTypesEnum.Grid_View">
+                <app-grid-view [repository]="repositories"></app-grid-view>
+            </ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="viewTypesEnum.Card_View">
-            <app-grid-view [repository]="repositories"></app-grid-view>
-        </ng-container>
-    </ng-container>
+        <ng-container *ngIf="loading$ |async" [ngTemplateOutlet]="loading"></ng-container>
+    </div>
 </ng-container>
 <ng-template #loading>
     <h3>Loading...</h3>

@@ -1,3 +1,3 @@
 <div class="card-view">
-    <app-repository class="item" [repository]="repository" *ngFor="let repository of repository"></app-repository>
+    <app-repository  class="item" [repository]="repository" *ngFor="let repository of repository; trackBy: trackByFn"></app-repository>
 </div>
