@@ -8,5 +8,5 @@ export const repositoryMockData: IRepository = {
     language: 'Typescript',
     stargazers_count: 9999,
     updated_at: new Date().toDateString(),
-    url_html: 'https://github.com/skpal123/angular-development'
+    html_url: 'https://github.com/skpal123/angular-development',
 }

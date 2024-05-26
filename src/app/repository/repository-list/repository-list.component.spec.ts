@@ -74,8 +74,8 @@ describe('RepositoryListComponent', () => {
   });
 
   it('should called infinite scroll when scroll end', () => {
-    //component.repositories = <never>[{ stargazers_count: 80 }]
-    component.onWindowScroll({ target: { scrollHeight: 400, scrollTop: 300, offsetHeight: 150 }});
+    component.scrollContainer = { nativeElement: { scrollHeight: 400, scrollTop: 200, clientHeight: 201}}
+    component.onWindowScroll();
 
     (<jasmine.Spy>repositoryService.getRepositories).and.returnValue(of({ items: [{ stargazers_count: 90 }, { stargazers_count: 80 }] }))
     expect(repositoryService.getRepositories).toHaveBeenCalledWith({order: SortOrderEnum.ASC, sort: 'stars', page: 2, per_page: 50 }, <never>null);

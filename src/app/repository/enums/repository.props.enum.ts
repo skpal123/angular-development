@@ -6,5 +6,5 @@ export enum RepositoryProps {
     NumberOfStars = 'stargazers_count',
     OwnerName = 'owner',
     LastUpdatedDate = 'updated_at',
-    URL = 'url_html'
+    URL = 'html_url'
 }

@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IRepository } from '../interfaces/repository.interface';
 
 @Component({
   selector: 'app-card-view',
   templateUrl: './card-view.component.html',
-  styleUrls: ['./card-view.component.scss']
+  styleUrls: ['./card-view.component.scss'], 
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardViewComponent {
   @Input() repository!: IRepository[];
