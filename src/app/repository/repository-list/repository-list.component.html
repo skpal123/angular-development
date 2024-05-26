@@ -18,8 +18,9 @@
         </select>
     </div>
 </div>
+{{repositories.length}}
 <ng-container [ngSwitch]="viewTypeCtrl.value">
-    <div class="repository-container" (scroll)="onWindowScroll($event)">
+    <div class="repository-container" #scrollContainer (scroll)="onWindowScroll()">
         <ng-container *ngIf="repositories.length > 0; else loading">
             <ng-container *ngSwitchCase="viewTypesEnum.Card_View">
                 <app-card-view [repository]="repositories"></app-card-view>

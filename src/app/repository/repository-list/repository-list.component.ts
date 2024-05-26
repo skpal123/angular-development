@@ -1,20 +1,21 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { RepositoryService } from 'src/app/services/repository.service';
-import { IRepository } from '../interfaces/repository.interface';
-import { BehaviorSubject, Observable, Subject, concat, finalize, map, of, takeUntil } from 'rxjs';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { BehaviorSubject, Observable, Subject, finalize, map, takeUntil } from 'rxjs';
 import { IKeyValue } from 'src/app/core/interfaces/generic.interface';
 import { LanguagesService } from 'src/app/services/languages.service';
-import { ViewTypeEnum } from '../enums/view-type.enum';
-import { FormControl } from '@angular/forms';
+import { RepositoryService } from 'src/app/services/repository.service';
 import { SortOrderEnum } from '../enums/sort-order.enum';
+import { ViewTypeEnum } from '../enums/view-type.enum';
+import { IRepository } from '../interfaces/repository.interface';
 
 @Component({
   selector: 'app-repository-list',
   templateUrl: './repository-list.component.html',
-  styleUrls: ['./repository-list.component.scss']
+  styleUrls: ['./repository-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RepositoryListComponent implements OnInit, OnDestroy {
-
+  @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
   public repository$!: Observable<IRepository[]>;
   public languages$!: Observable<{ label: string; value: string; }[]>;
   public readonly sortOrders: { label: string; value: string }[] = [{ label: 'ASC', value: SortOrderEnum.ASC }, { label: 'DESC', value: SortOrderEnum.DESC }];
@@ -28,8 +29,10 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
   private clearSubs$ = new Subject();
   private page = 1;
 
-  public onWindowScroll(event: any) {
-    if (event.target.scrollHeight < event.target.scrollTop + event.target.offsetHeight) {
+  public onWindowScroll() {
+    const element = this.scrollContainer.nativeElement;
+    const scrolledAtBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 1;
+    if (scrolledAtBottom && !this.loading$.value) {
       this.page++;
       this.loading$.next(true);
       this.getRepositories(this.createParams());
@@ -39,7 +42,6 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
   constructor(private repositoryService: RepositoryService, private languagesService: LanguagesService) { }
 
   public ngOnInit(): void {
-    //this.repository$ = this.getRepositories(this.createParams());
     this.languages$ = this.getLanguages();
     this.getRepositories(this.createParams());
   }
@@ -50,25 +52,25 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
   }
 
   public sortControlChange(): void {
-    //this.repository$ = this.getRepositories(this.createParams());
     this.repositories = [];
     this.getRepositories(this.createParams());
   }
 
   public languageControlChange(): void {
-    //this.repository$ = this.getRepositories(this.createParams());
     this.repositories = [];
     this.getRepositories(this.createParams());
   }
 
-  private getRepositories(params: IKeyValue = {}): void {
+  private getRepositories(params: IKeyValue): void {
     this.repositoryService.getRepositories(params, this.languageCtrl.value)
-    .pipe(takeUntil(this.clearSubs$), finalize(() => this.loading$.next(false)), map(x => {
-      return (<IRepository[]>x['items'])
-    })).subscribe({
-      next: (res) => this.repositories = this.repositories.concat(res).sort((a, b) => a.stargazers_count - b.stargazers_count),
-      error: (error) => console.log(error)
-    });
+      .pipe(takeUntil(this.clearSubs$), finalize(() => this.loading$.next(false)), map(x => {
+        return (<IRepository[]>x['items'])
+      })).subscribe({
+        next: (res) => {
+          this.repositories = this.repositories.concat(res).sort((a, b) => a.stargazers_count - b.stargazers_count)
+        },
+        error: (error) => console.log(error)
+      });
   }
 
   private getLanguages(): Observable<{ label: string; value: string; }[]> {

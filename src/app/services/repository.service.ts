@@ -16,6 +16,8 @@ export class RepositoryService extends DemoAppRestApiService {
   }
 
   getRepositories(params = {}, language: string = ''): Observable<IKeyValue> {
-    return this.getItem(params, `repositories?${language ? `q=language:${language}`: `q=Q`}`)
+
+    const url = language ? `q=language:${language}` : `q=Q`;
+    return this.getItem(params, `repositories?${url}`)
   }
 }
