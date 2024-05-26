@@ -29,7 +29,7 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
   private page = 1;
 
   public onWindowScroll(event: any) {
-    if (event.target.scrollHeight < event.target.scrollTop + event.target.offsetHeight) {
+    if (event.target.scrollHeight < Math.ceil(event.target.scrollTop) + event.target.offsetHeight) {
       this.page++;
       this.loading$.next(true);
       this.getRepositories(this.createParams());
@@ -39,7 +39,6 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
   constructor(private repositoryService: RepositoryService, private languagesService: LanguagesService) { }
 
   public ngOnInit(): void {
-    //this.repository$ = this.getRepositories(this.createParams());
     this.languages$ = this.getLanguages();
     this.getRepositories(this.createParams());
   }
@@ -50,23 +49,23 @@ export class RepositoryListComponent implements OnInit, OnDestroy {
   }
 
   public sortControlChange(): void {
-    //this.repository$ = this.getRepositories(this.createParams());
     this.repositories = [];
     this.getRepositories(this.createParams());
   }
 
   public languageControlChange(): void {
-    //this.repository$ = this.getRepositories(this.createParams());
     this.repositories = [];
     this.getRepositories(this.createParams());
   }
 
-  private getRepositories(params: IKeyValue = {}): void {
+  private getRepositories(params: IKeyValue): void {
     this.repositoryService.getRepositories(params, this.languageCtrl.value)
     .pipe(takeUntil(this.clearSubs$), finalize(() => this.loading$.next(false)), map(x => {
       return (<IRepository[]>x['items'])
     })).subscribe({
-      next: (res) => this.repositories = this.repositories.concat(res).sort((a, b) => a.stargazers_count - b.stargazers_count),
+      next: (res) => {
+        this.repositories = this.repositories.concat(res).sort((a, b) => a.stargazers_count - b.stargazers_count)
+      },
       error: (error) => console.log(error)
     });
   }

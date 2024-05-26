@@ -8,5 +8,4 @@ import { IRepository } from '../interfaces/repository.interface';
 })
 export class RepositoryComponent {
   @Input() public repository!: IRepository;
-
 } 

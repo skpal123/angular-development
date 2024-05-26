@@ -9,7 +9,7 @@ import { IRepository } from '../interfaces/repository.interface';
 export class CardViewComponent {
   @Input() repository!: IRepository[];
 
-  trackByFn(index: number, item: IRepository) {
+  trackByFn(index: number, item: IRepository): string {
     return `${index}_${item.id}`;
  }
 }

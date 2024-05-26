@@ -13,7 +13,6 @@ export class ApiServiceHttpParameterCodec implements HttpParameterCodec {
 export abstract class DemoAppRestApiService {
     protected appServiceUrl = `${environment.serviceUrl}`;
     protected baseUrl: string = '';
-    protected urlRoot: string = `${environment.serviceUrl}`;
 
     constructor(protected httpClient: HttpClient) {
     }
@@ -23,7 +22,7 @@ export abstract class DemoAppRestApiService {
     }
 
     protected getUrlBase(): string {
-        return this.baseUrl === '' ? `${this.urlRoot}` : `${this.urlRoot}/${this.baseUrl}`;
+        return `${this.appServiceUrl}/${this.baseUrl}`;
     }
 
     protected getRequestUrl(url: string): string {
